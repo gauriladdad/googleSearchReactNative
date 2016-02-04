@@ -1,0 +1,22 @@
+Testing on my device : 
+
+Open rage shake menu (shake the device) or run adb shell input keyevent 82
+Go to Dev Settings
+Go to Debug server host for device
+Type in your machine's IP address and the port of the packager (e.g. 10.0.1.1:8081) and Reload JS. On Mac, you can find the IP address in System Preferences / Network.
+
+for debug:
+on phone select - debug JS
+in chrome - localhost:8081/debugger-ui - launch more tools/developers options
+
+.bind(this) - in click or such events is important. (This is otherwise undefined)
+
+======
+GsearchResultClass: "GwebSearch"
+cacheUrl: ""
+content: "<b>London</b> is a leading global city, with strengths in the arts, commerce, education, ↵entertainment, fashion, finance, healthcare, media, professional services, ..."
+title: "<b>London</b> - Wikipedia, the free encyclopedia"
+titleNoFormatting: "London - Wikipedia, the free encyclopedia"
+unescapedUrl: "https://en.wikipedia.org/wiki/London"
+url: "https://en.wikipedia.org/wiki/London"
+visibleUrl: "en.wikipedia.org"
