@@ -4,6 +4,7 @@ var React = require('react-native');
 var SearchResults = require('./SearchResults');
 const Dimensions = require('Dimensions');
 const windowDims = Dimensions.get('window');
+var ProgressBar = require('ProgressBarAndroid');
 
 var {
 	StyleSheet,
@@ -75,13 +76,13 @@ class SearchPage extends Component {
 
 		this.state = {
 			searchString: 'london',
-			isLoading: true,
-			message: '',
 			windowHeight: 0,
 			resultCount: 0,
 			resultResponse: {},
 			latitude: 51.5073,
-			longitude: -0.1277
+			longitude: -0.1277,
+			timer: null,
+			progress: 0
 		};
 	}
 
@@ -96,8 +97,11 @@ class SearchPage extends Component {
 	}
 
 	render() {
+		var spinner = this.state.progress > 0 ? 
+		(<ProgressBar progress={this.state.progress}/>)
+		: (<View/>);
 		return (
-			<View style={styles.container} 
+			 <View style={styles.container} 
 					onLayout={(event) => {
 						var layout = event.nativeEvent.layout;
 						if (layout.width == windowDims.width)
@@ -132,11 +136,21 @@ class SearchPage extends Component {
 					<Text style={styles.buttonText}>Include location</Text>
 				</TouchableHighlight>	
 
+				{spinner}
+
 				<SearchResults results={this.state.resultResponse}
 				height={(this.state.windowHeight - 180)}/>
-
 			</View>
 		);
+	}
+
+ 	never_call () {
+  		this.setState({ progress: this.state.progress + (0.4 * Math.random())});
+	}
+
+	incrementProgress()
+	{
+		this.setState({timer : setTimeout(this.never_call(),1000)});
 	}
 
 	onSearchTextChanged(event) {
@@ -147,8 +161,6 @@ class SearchPage extends Component {
 	}
 
 	_handleResponse(searchResult) {
-		this.setState({ isLoading: false, message: ''});
-
 		if(searchResult.responseStatus === 200) {
 			console.log("json: "+ searchResult.responseData.results);
 
@@ -159,11 +171,13 @@ class SearchPage extends Component {
 		
 			this.setState({resultResponse : searchResult.responseData.results});
 			this.setState({resultCount : searchResult.responseData.results.length});
-			
 		}
-		else {
-			this.setState({ message: 'Location not recognized, please try again'});
-		}
+		if (this.state.timer != null)
+		{
+			clearInterval(this.state.timer);
+			this.setState({timer: null});
+		}	
+			this.setState({progress: 0});
 	}
 
 	_fetchResults(query)
@@ -175,11 +189,16 @@ class SearchPage extends Component {
 		})
       	//.then(response => console.log(response))
       	//.then(response => console.log("I am json: " + response.json()))
-     	.catch(error => console.log("error: " + error));
+     	.catch(error => { console.log("error: " + error)
+     		this.setState({ progress: 0});
+     	});
 	}
 
 	onLocationPressed() {
-		//location=-33.8670522,151.1957362&radius=500
+		this.incrementProgress();
+
+		this.setState({resultResponse : {}});
+
 		var searchStringArr = this.state.searchString.split(" ");
 		var params = "&q=" + searchStringArr.length > 1 ? searchStringArr.join("+") : this.state.searchString;
 	
@@ -192,6 +211,10 @@ class SearchPage extends Component {
 	}
 
 	onSearchPressed() {
+		this.incrementProgress();
+
+		this.setState({resultResponse : {}});
+
 		var searchStringArr = this.state.searchString.split(" ");
 		var params = "&q=" + (searchStringArr.length > 1 ? searchStringArr.join("+") : this.state.searchString);
 		var query = urlForQueryAndPage(params);
