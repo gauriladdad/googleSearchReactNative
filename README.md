@@ -8,6 +8,7 @@ This is a react-native android project. It tries to mimick the google search as 
 3. Sublime editor
 4. SourceTree
 5. NPM
+6. Genymotion 
 
 ### Libraries/Components used
 
@@ -21,5 +22,9 @@ This is a react-native android project. It tries to mimick the google search as 
 2. There is no direction support to identify change in rotation and render screen accordingly. I have made use of onLayout event of View component. Based on height/width of layout and using width/height retrieved from Dimension is used to identify whether device is in potrait mode or landscope.
 
 
+### How to run this project
 
+1. Please download the project zip and unzip it.
+2. Go to command prompt at the location of zip, run npm install.
+3. Type command react-native run-android. (At this point either the device or emulator should be present.)
 
