@@ -22,6 +22,10 @@ url: "https://en.wikipedia.org/wiki/London"
 visibleUrl: "en.wikipedia.org"
 
 
+=====have enabled location access for android : <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+http://stackoverflow.com/questions/35126349/react-native-android-ignores-navigator-geolocation-getcurrentposition
+
 ======display html text in react-native - https://github.com/jsdf/react-native-htmlview
 
 =====text truncation 
@@ -53,11 +57,3 @@ https://facebook.github.io/react-native/docs/style.html
 
 
 
-			<View style={styles.container} 
-					onLayout={(event) => {
-						var layout = event.nativeEvent.layout;
-  						//console.log(layout.width < layout.height ? 'portrait' : 'landscape'); 
-  						if (layout.width < layout.height)
-  							this.setState({widowHeight : windowDims.height});
-  						//windowDims.height
-  					} }> 

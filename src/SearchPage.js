@@ -65,8 +65,8 @@ var styles = StyleSheet.create({
 	}
 });
 
-function urlForQueryAndPage(value) {
-	return 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=' + encodeURIComponent(value);
+function urlForQueryAndPage(params) {
+	return 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=0&num=10' + params;
 }
 
 class SearchPage extends Component {
@@ -79,13 +79,20 @@ class SearchPage extends Component {
 			message: '',
 			windowHeight: 0,
 			resultCount: 0,
-			resultResponse: {}
+			resultResponse: {},
+			latitude: 51.5073,
+			longitude: -0.1277
 		};
 	}
 
 	componentDidMount() {
 		this.setState({windowHeight : windowDims.height});
 		console.log("in componentDidMount windowHeight: " + this.state.windowHeight);
+
+		this.watchID = navigator.geolocation.watchPosition((position) => {
+      		this.setState({latitude: position.coords.latitude});
+      		this.setState({longitude: position.coords.longitude});
+    	});
 	}
 
 	render() {
@@ -96,14 +103,12 @@ class SearchPage extends Component {
 						if (layout.width == windowDims.width)
   						{
   							console.log('portrait');
-
   							this.setState({windowHeight : windowDims.height});
   						}
   						else if (layout.width > windowDims.width) {
   							console.log('landscape');
   							this.setState({windowHeight : windowDims.width});
   						}
-  						console.log("widowHeight: " + this.state.windowHeight);
   					} }> 
 
 				<View style={styles.flowRight}>
@@ -124,7 +129,7 @@ class SearchPage extends Component {
 				<TouchableHighlight style={styles.button}
 					underlayColor='#99d9f4'
 					onPress={this.onLocationPressed.bind(this)}>
-					<Text style={styles.buttonText}>Location</Text>
+					<Text style={styles.buttonText}>Include location</Text>
 				</TouchableHighlight>	
 
 				<SearchResults results={this.state.resultResponse}
@@ -134,30 +139,11 @@ class SearchPage extends Component {
 		);
 	}
 
-	onLocationPressed() {
-		
-	}
-
 	onSearchTextChanged(event) {
 		this.setState({ searchString: event.nativeEvent.text });
 
 		console.log("event.nativeEvent.text: " + event.nativeEvent.text);
 		console.log("this.state.searchString: " + this.state.searchString);
-	}
-
-
-	_executeQuery(query) {
-		console.log(query);
-		this.setState({isLoading: true});
-		fetch(query)
-			.then(response => console.log("results: " + response.json().results))
-			//.then(response => response.json())
-			//.then(json => this._handleResponse(json.response))
-			.catch(error => 
-				this.setState({
-					isLoading: false,
-					message: 'Something bad happened ' + error	
-			}));
 	}
 
 	_handleResponse(searchResult) {
@@ -180,14 +166,9 @@ class SearchPage extends Component {
 		}
 	}
 
-	onSearchPressed() {
-		var query = urlForQueryAndPage(this.state.searchString);
+	_fetchResults(query)
+	{
 		fetch(query)
-		/*.then(response => { 
-			console.log(response.json()); 
-			var data = response._bodyInit;
-			console.log("responseData: " + data["responseData"]);
-		})*/
 		.then(response => response.json())
 		.then(json => { 
 			this._handleResponse(json);
@@ -195,6 +176,27 @@ class SearchPage extends Component {
       	//.then(response => console.log(response))
       	//.then(response => console.log("I am json: " + response.json()))
      	.catch(error => console.log("error: " + error));
+	}
+
+	onLocationPressed() {
+		//location=-33.8670522,151.1957362&radius=500
+		var searchStringArr = this.state.searchString.split(" ");
+		var params = "&q=" + searchStringArr.length > 1 ? searchStringArr.join("+") : this.state.searchString;
+	
+		params += "&location=" + this.state.latitude + "," + this.state.longitude;
+		params += "&radius=500";
+
+		var query = urlForQueryAndPage(params);
+		console.log("query: " + query);
+		this._fetchResults(query);
+	}
+
+	onSearchPressed() {
+		var searchStringArr = this.state.searchString.split(" ");
+		var params = "&q=" + (searchStringArr.length > 1 ? searchStringArr.join("+") : this.state.searchString);
+		var query = urlForQueryAndPage(params);
+		console.log("query: " + query);
+		this._fetchResults(query);	
 	}
 }
 
