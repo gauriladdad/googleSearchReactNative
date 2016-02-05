@@ -2,6 +2,8 @@
 
 var React = require('react-native');
 var SearchResults = require('./SearchResults');
+const Dimensions = require('Dimensions');
+const windowDims = Dimensions.get('window');
 
 var {
 	StyleSheet,
@@ -9,21 +11,13 @@ var {
 	TextInput,
 	View,
 	TouchableHighlight,
-	
-	Image,
 	Component
 } = React;
 
 var styles = StyleSheet.create({
-	description: {
-		marginBottom: 20,
-		fontSize: 18,
-		textAlign: 'center',
-		color: '#656565'
-	},
 	container: {
 		padding: 30,
-		marginTop: 65,
+		marginTop: 25,
 		alignItems: 'stretch'
 	},
 	truncate: {
@@ -47,7 +41,7 @@ var styles = StyleSheet.create({
 		borderColor: '#48BBEC',
 		borderWidth: 1,
 		borderRadius: 8,
-		marginBottom: 10,
+		marginBottom: 15,
 		alignSelf: 'stretch',
 		justifyContent: 'center'
 	},
@@ -62,17 +56,18 @@ var styles = StyleSheet.create({
 		borderRadius: 8,
 		color: '#48BBEC'
 	},
-	image: {
-		width: 217,
-		height: 138
+	textContainer: {
+		flex: 1
+	},
+	rowContainer: {
+		flexDirection: 'row',
+		padding: 10
 	}
 });
 
 function urlForQueryAndPage(value) {
 	return 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=' + encodeURIComponent(value);
 }
-
-
 
 class SearchPage extends Component {
 	constructor(props) {
@@ -82,13 +77,13 @@ class SearchPage extends Component {
 			searchString: 'london',
 			isLoading: true,
 			message: '',
+			resultCount: 0,
 			resultResponse: {}
 		};
 	}
 
 
 	render() {
-		
 		return (
 			<View style={styles.container}>
 				<View style={styles.flowRight}>
@@ -116,12 +111,10 @@ class SearchPage extends Component {
 					onPress={this.onLocationPressed.bind(this)}>
 					<Text style={styles.buttonText}>Location</Text>
 				</TouchableHighlight>	
-				<Image source={{ uri: "house", isStatic: true }} style={styles.image}/>
-				
 
-				<Text style={styles.description}>{this.state.message}</Text>	
+				<SearchResults results={this.state.resultResponse}
+				style={{height: windowDims.height - 125}}/>
 
-				<SearchResults results={this.state.resultResponse}/>
 			</View>
 		);
 	}
@@ -163,6 +156,7 @@ class SearchPage extends Component {
         			console.log("object: " + object.url);
     			});
 			this.setState({resultResponse : searchResult.responseData.results});
+			this.setState({resultCount : searchResult.responseData.results.length});
 			
 		}
 		else {

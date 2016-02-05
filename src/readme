@@ -23,3 +23,9 @@ visibleUrl: "en.wikipedia.org"
 
 =====text truncation 
 flexDirection: 'row' is very important along with numberOfLines
+
+https://facebook.github.io/react-native/docs/flexbox.html
+
+for scrolling issue wiht list - http://stackoverflow.com/questions/29528174/react-native-listview-not-displaying-all-rows
+
+show read more link - https://github.com/facebook/react-native/issues/2496

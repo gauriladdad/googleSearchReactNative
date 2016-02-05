@@ -14,18 +14,15 @@ var {
 } = React;
 
 var styles = StyleSheet.create({
-	textContainer: {
-		flex: 1
+	rowContainer: {
+		flex: 1,
+		overflow:'hidden',
+		flexDirection: 'row'
 	},
 	separator: {
-		height: 1,
-		backgroundColor: '#dddddd'
-	},
-	price: {
-		fontSize: 25,
-		fontWeight: 'bold',
-		color: '#48BBEC'
-	},
+    	height: 1,
+    	backgroundColor: '#CCCCCC',
+  	},
 	title: {
 		fontSize: 20,
 		flexDirection: 'row',
@@ -51,23 +48,23 @@ class SearchResults extends Component {
 
 	renderRow(rowData, sectionID, rowID) {
 		return (
-			<TouchableHighlight 
-			onPress={() => 
-				this.rowPressed(rowData.url)}
-				underlayColor='#dddddd'>
-				<View>
-					<Text style={styles.title} numberofLines={1}>
-						{rowData.url}
-					</Text>	
-				</View>	
-			</TouchableHighlight>			
+					<View style={styles.rowContainer}>
+						<Text style={styles.title} numberofLines={1}
+						>
+							{rowData.url}
+						</Text>	
+					</View>	
+					
 		);
 	}	
 
 	render() {
 		return (
-			<ListView dataSource={this.state.dataSource.cloneWithRows(this.props.results)}
-			renderRow={this.renderRow.bind(this)}/>
+			<ListView
+			dataSource={this.state.dataSource.cloneWithRows(this.props.results)}
+			renderRow={this.renderRow.bind(this)}
+			renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} 
+							style={styles.separator} />}/>
 		);
 	}
 
