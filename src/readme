@@ -20,3 +20,6 @@ titleNoFormatting: "London - Wikipedia, the free encyclopedia"
 unescapedUrl: "https://en.wikipedia.org/wiki/London"
 url: "https://en.wikipedia.org/wiki/London"
 visibleUrl: "en.wikipedia.org"
+
+=====text truncation 
+flexDirection: 'row' is very important along with numberOfLines

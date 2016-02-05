@@ -24,7 +24,10 @@ var styles = StyleSheet.create({
 	container: {
 		padding: 30,
 		marginTop: 65,
-		alignItems: 'center'
+		alignItems: 'stretch'
+	},
+	truncate: {
+		flexDirection: 'row'
 	},
 	flowRight: {
 		flexDirection: 'row',
@@ -102,6 +105,11 @@ class SearchPage extends Component {
 						</Text>			
 					</TouchableHighlight>	
 				</View>
+
+				<Text style={styles.truncate} numberOfLines={1}>
+					GIGIJASDGJAHSDKJAHDKJAHSDKJAHSDKAJHSDKAJDHSKAJSD AKSHDKJADHASKJDH
+					ASJDHAKSDJHAKJSDH AKJSHDKASDHKAJSDH KAJSHDKAJDSH
+				</Text>
 				
 				<TouchableHighlight style={styles.button}
 					underlayColor='#99d9f4'

@@ -9,15 +9,11 @@ var {
 	TouchableHighlight,
 	ListView,
 	Text,
-	Component
+	Component,
+	IntentAndroid
 } = React;
 
 var styles = StyleSheet.create({
-	thumb: {
-		width: 80,
-		height: 80,
-		marginRight: 10
-	},
 	textContainer: {
 		flex: 1
 	},
@@ -32,6 +28,7 @@ var styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 20,
+		flexDirection: 'row',
 		color: '#48BBEC'
 	}
 });
@@ -56,19 +53,14 @@ class SearchResults extends Component {
 		return (
 			<TouchableHighlight 
 			onPress={() => 
-				this.rowPressed(rowData.guid)}
+				this.rowPressed(rowData.url)}
 				underlayColor='#dddddd'>
 				<View>
-					<View>
-						<View sytle={styles.textContainer}>
-							<Text style={styles.title} numberofLines={1}>
-								{rowData.url}
-							</Text>	
-						</View>		
-					</View>
-					<View style={styles.separator}/>
-				</View>			
-			</TouchableHighlight>
+					<Text style={styles.title} numberofLines={1}>
+						{rowData.url}
+					</Text>	
+				</View>	
+			</TouchableHighlight>			
 		);
 	}	
 
@@ -79,8 +71,8 @@ class SearchResults extends Component {
 		);
 	}
 
-	rowPressed(propertyGuid) {
-	  	
+	rowPressed(url) {
+	  	IntentAndroid.openURL(url);
 	}
 }
 
