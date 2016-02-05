@@ -33,6 +33,8 @@ for scrolling issue wiht list - http://stackoverflow.com/questions/29528174/reac
 
 show read more link - https://github.com/facebook/react-native/issues/2496
 
+======issues with list component - https://github.com/facebook/react-native/issues/901
+
 =======back up of truncate text
 <View style={styles.rowContainer}>
 						<Text style={styles.title} numberofLines={1}
@@ -40,3 +42,22 @@ show read more link - https://github.com/facebook/react-native/issues/2496
 							{rowData.url}
 						</Text>	
 					</View>	
+
+=======auto layout change issue - https://github.com/facebook/react-native/issues/25
+======on layout function - 
+onLayout={(event) => {
+  						this.setState({rowWidth: event.nativeEvent.layout.width}); 
+  						} }
+=====pass around styles
+https://facebook.github.io/react-native/docs/style.html					
+
+
+
+			<View style={styles.container} 
+					onLayout={(event) => {
+						var layout = event.nativeEvent.layout;
+  						//console.log(layout.width < layout.height ? 'portrait' : 'landscape'); 
+  						if (layout.width < layout.height)
+  							this.setState({widowHeight : windowDims.height});
+  						//windowDims.height
+  					} }> 

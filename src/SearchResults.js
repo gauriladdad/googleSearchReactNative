@@ -2,6 +2,7 @@
 
 var React = require('react-native');
 var HTMLView = require('react-native-htmlview');
+
 var {
 	StyleSheet,
 	Image,
@@ -32,7 +33,8 @@ var styles = StyleSheet.create({
 		color: 'blue'
 	},
 	url: {
-		fontSize: 10,
+		fontSize: 12,
+		fontFamily: 'Arial',
 		flexDirection: 'row',
 		color: 'green',
 		paddingBottom: 10
@@ -44,16 +46,11 @@ class SearchResults extends Component {
 	constructor(props) {
 		super(props);
 		console.log("creating search results: " + props.results);
-		this.state = {
+		this.state = {	
 			dataSource: new ListView.DataSource(
 			{rowHasChanged: (r1, r2) => r1.url !== r2.url})
 		};
 	}
-
-	componentWillMount() {
-		console.log("comoponent mounted");
-	}
-
 
 	renderRow(rowData, sectionID, rowID) {
 		return (
@@ -62,15 +59,13 @@ class SearchResults extends Component {
 						<Text style={styles.title} numberofLines={2}
 							 			onPress={() => 
 										this.rowPressed(rowData.url)}>
-							
 							{rowData.titleNoFormatting}
 						</Text>	
 					</View>
 
 					<View style={styles.rowContainer}>
 						<Text style={styles.url} numberofLines={1}>
-						
-							{rowData.url}
+							{this.changeText(rowData.url)}
 						</Text>
 					</View>
 
@@ -87,11 +82,25 @@ class SearchResults extends Component {
 	render() {
 		return (
 			<ListView
+			style={this.changeStyle()}
 			dataSource={this.state.dataSource.cloneWithRows(this.props.results)}
 			renderRow={this.renderRow.bind(this)}
 			renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} 
 							style={styles.rowSeparator} />}/>
 		);
+	}
+
+	changeText(url)
+	{
+		return url.length > 40 ? url.substring(0, 40) + "..."
+					: url;;
+	}
+
+	changeStyle()
+	{
+		return {
+			height: this.props.height
+		}
 	}
 
 	rowPressed(url) {

@@ -17,11 +17,8 @@ var {
 var styles = StyleSheet.create({
 	container: {
 		padding: 30,
-		marginTop: 25,
+		marginTop: 15,
 		alignItems: 'stretch'
-	},
-	truncate: {
-		flexDirection: 'row'
 	},
 	flowRight: {
 		flexDirection: 'row',
@@ -62,6 +59,9 @@ var styles = StyleSheet.create({
 	rowContainer: {
 		flexDirection: 'row',
 		padding: 10
+	},
+	listHeight: {
+		height: 400
 	}
 });
 
@@ -82,10 +82,10 @@ class SearchPage extends Component {
 		};
 	}
 
-
 	render() {
 		return (
 			<View style={styles.container}>
+
 				<View style={styles.flowRight}>
 					<TextInput 
 						style={styles.searchInput}
@@ -101,11 +101,6 @@ class SearchPage extends Component {
 					</TouchableHighlight>	
 				</View>
 
-				<Text style={styles.truncate} numberOfLines={1}>
-					GIGIJASDGJAHSDKJAHDKJAHSDKJAHSDKAJHSDKAJDHSKAJSD AKSHDKJADHASKJDH
-					ASJDHAKSDJHAKJSDH AKJSHDKASDHKAJSDH KAJSHDKAJDSH
-				</Text>
-				
 				<TouchableHighlight style={styles.button}
 					underlayColor='#99d9f4'
 					onPress={this.onLocationPressed.bind(this)}>
@@ -113,7 +108,7 @@ class SearchPage extends Component {
 				</TouchableHighlight>	
 
 				<SearchResults results={this.state.resultResponse}
-				style={{height: windowDims.height - 125}}/>
+				height={(windowDims.height - 180)}/>
 
 			</View>
 		);
@@ -155,6 +150,7 @@ class SearchPage extends Component {
         			console.log("result number: " + i);
         			console.log("object: " + object.url);
     			});
+		
 			this.setState({resultResponse : searchResult.responseData.results});
 			this.setState({resultCount : searchResult.responseData.results.length});
 			
