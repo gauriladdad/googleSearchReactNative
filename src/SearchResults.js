@@ -5,7 +5,6 @@ var HTMLView = require('react-native-htmlview');
 
 var {
 	StyleSheet,
-	Image,
 	View,
 	TouchableHighlight,
 	ListView,
@@ -45,7 +44,6 @@ class SearchResults extends Component {
 
 	constructor(props) {
 		super(props);
-		console.log("creating search results: " + props.results);
 		this.state = {	
 			dataSource: new ListView.DataSource(
 			{rowHasChanged: (r1, r2) => r1.url !== r2.url})
@@ -73,7 +71,6 @@ class SearchResults extends Component {
 					
 					<HTMLView
 			        value={rowData.content}
-			        onLinkPress={(url) => console.log('navigating to: ', url)}
 			        stylesheet={styles}/>
 				</View>	
 		);

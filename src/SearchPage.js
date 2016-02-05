@@ -1,10 +1,11 @@
 'use strict';
 
 var React = require('react-native');
+var ProgressBar = require('ProgressBarAndroid');
 var SearchResults = require('./SearchResults');
+
 const Dimensions = require('Dimensions');
 const windowDims = Dimensions.get('window');
-var ProgressBar = require('ProgressBarAndroid');
 
 var {
 	StyleSheet,
@@ -53,21 +54,11 @@ var styles = StyleSheet.create({
 		borderColor: '#48BBEC',
 		borderRadius: 8,
 		color: '#48BBEC'
-	},
-	textContainer: {
-		flex: 1
-	},
-	rowContainer: {
-		flexDirection: 'row',
-		padding: 10
-	},
-	listHeight: {
-		height: 400
 	}
 });
 
 function urlForQueryAndPage(params) {
-	return 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=0&num=10' + params;
+	return 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0' + params;
 }
 
 class SearchPage extends Component {
@@ -79,8 +70,6 @@ class SearchPage extends Component {
 			windowHeight: 0,
 			resultCount: 0,
 			resultResponse: {},
-			latitude: 51.5073,
-			longitude: -0.1277,
 			timer: null,
 			progress: 0
 		};
@@ -88,12 +77,6 @@ class SearchPage extends Component {
 
 	componentDidMount() {
 		this.setState({windowHeight : windowDims.height});
-		console.log("in componentDidMount windowHeight: " + this.state.windowHeight);
-
-		this.watchID = navigator.geolocation.watchPosition((position) => {
-      		this.setState({latitude: position.coords.latitude});
-      		this.setState({longitude: position.coords.longitude});
-    	});
 	}
 
 	render() {
@@ -130,16 +113,10 @@ class SearchPage extends Component {
 					</TouchableHighlight>	
 				</View>
 
-				<TouchableHighlight style={styles.button}
-					underlayColor='#99d9f4'
-					onPress={this.onLocationPressed.bind(this)}>
-					<Text style={styles.buttonText}>Include location</Text>
-				</TouchableHighlight>	
-
 				{spinner}
 
 				<SearchResults results={this.state.resultResponse}
-				height={(this.state.windowHeight - 180)}/>
+				height={(this.state.windowHeight - 150)}/>
 			</View>
 		);
 	}
@@ -155,20 +132,11 @@ class SearchPage extends Component {
 
 	onSearchTextChanged(event) {
 		this.setState({ searchString: event.nativeEvent.text });
-
-		console.log("event.nativeEvent.text: " + event.nativeEvent.text);
 		console.log("this.state.searchString: " + this.state.searchString);
 	}
 
 	_handleResponse(searchResult) {
 		if(searchResult.responseStatus === 200) {
-			console.log("json: "+ searchResult.responseData.results);
-
-			searchResult.responseData.results.map(function(object, i){
-        			console.log("result number: " + i);
-        			console.log("object: " + object.url);
-    			});
-		
 			this.setState({resultResponse : searchResult.responseData.results});
 			this.setState({resultCount : searchResult.responseData.results.length});
 		}
@@ -187,27 +155,10 @@ class SearchPage extends Component {
 		.then(json => { 
 			this._handleResponse(json);
 		})
-      	//.then(response => console.log(response))
-      	//.then(response => console.log("I am json: " + response.json()))
-     	.catch(error => { console.log("error: " + error)
+      	.catch(error => { 
+      		console.log("error: " + error)
      		this.setState({ progress: 0});
      	});
-	}
-
-	onLocationPressed() {
-		this.incrementProgress();
-
-		this.setState({resultResponse : {}});
-
-		var searchStringArr = this.state.searchString.split(" ");
-		var params = "&q=" + searchStringArr.length > 1 ? searchStringArr.join("+") : this.state.searchString;
-	
-		params += "&location=" + this.state.latitude + "," + this.state.longitude;
-		params += "&radius=500";
-
-		var query = urlForQueryAndPage(params);
-		console.log("query: " + query);
-		this._fetchResults(query);
 	}
 
 	onSearchPressed() {
