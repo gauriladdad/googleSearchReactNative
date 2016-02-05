@@ -77,14 +77,34 @@ class SearchPage extends Component {
 			searchString: 'london',
 			isLoading: true,
 			message: '',
+			windowHeight: 0,
 			resultCount: 0,
 			resultResponse: {}
 		};
 	}
 
+	componentDidMount() {
+		this.setState({windowHeight : windowDims.height});
+		console.log("in componentDidMount windowHeight: " + this.state.windowHeight);
+	}
+
 	render() {
 		return (
-			<View style={styles.container}>
+			<View style={styles.container} 
+					onLayout={(event) => {
+						var layout = event.nativeEvent.layout;
+						if (layout.width == windowDims.width)
+  						{
+  							console.log('portrait');
+
+  							this.setState({windowHeight : windowDims.height});
+  						}
+  						else if (layout.width > windowDims.width) {
+  							console.log('landscape');
+  							this.setState({windowHeight : windowDims.width});
+  						}
+  						console.log("widowHeight: " + this.state.windowHeight);
+  					} }> 
 
 				<View style={styles.flowRight}>
 					<TextInput 
@@ -108,7 +128,7 @@ class SearchPage extends Component {
 				</TouchableHighlight>	
 
 				<SearchResults results={this.state.resultResponse}
-				height={(windowDims.height - 180)}/>
+				height={(this.state.windowHeight - 180)}/>
 
 			</View>
 		);
