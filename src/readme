@@ -21,6 +21,9 @@ unescapedUrl: "https://en.wikipedia.org/wiki/London"
 url: "https://en.wikipedia.org/wiki/London"
 visibleUrl: "en.wikipedia.org"
 
+
+======display html text in react-native - https://github.com/jsdf/react-native-htmlview
+
 =====text truncation 
 flexDirection: 'row' is very important along with numberOfLines
 
@@ -29,3 +32,11 @@ https://facebook.github.io/react-native/docs/flexbox.html
 for scrolling issue wiht list - http://stackoverflow.com/questions/29528174/react-native-listview-not-displaying-all-rows
 
 show read more link - https://github.com/facebook/react-native/issues/2496
+
+=======back up of truncate text
+<View style={styles.rowContainer}>
+						<Text style={styles.title} numberofLines={1}
+						renderTruncatedFooter={() => <View><View/>}>
+							{rowData.url}
+						</Text>	
+					</View>	

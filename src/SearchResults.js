@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-
+var HTMLView = require('react-native-htmlview');
 var {
 	StyleSheet,
 	Image,
@@ -19,14 +19,23 @@ var styles = StyleSheet.create({
 		overflow:'hidden',
 		flexDirection: 'row'
 	},
-	separator: {
+	rowSeparator: {
+    	height: 10
+    },
+    separator: {
     	height: 1,
-    	backgroundColor: '#CCCCCC',
+    	backgroundColor: '#CCCCCC'
   	},
 	title: {
-		fontSize: 20,
+		fontSize: 15,
 		flexDirection: 'row',
-		color: '#48BBEC'
+		color: 'blue'
+	},
+	url: {
+		fontSize: 10,
+		flexDirection: 'row',
+		color: 'green',
+		paddingBottom: 10
 	}
 });
 
@@ -48,13 +57,30 @@ class SearchResults extends Component {
 
 	renderRow(rowData, sectionID, rowID) {
 		return (
-					<View style={styles.rowContainer}>
-						<Text style={styles.title} numberofLines={1}
-						>
-							{rowData.url}
+				<View>
+					<View>
+						<Text style={styles.title} numberofLines={2}
+							 			onPress={() => 
+										this.rowPressed(rowData.url)}>
+							
+							{rowData.titleNoFormatting}
 						</Text>	
-					</View>	
+					</View>
+
+					<View style={styles.rowContainer}>
+						<Text style={styles.url} numberofLines={1}>
+						
+							{rowData.url}
+						</Text>
+					</View>
+
+					<View style={styles.separator}/>	
 					
+					<HTMLView
+			        value={rowData.content}
+			        onLinkPress={(url) => console.log('navigating to: ', url)}
+			        stylesheet={styles}/>
+				</View>	
 		);
 	}	
 
@@ -64,7 +90,7 @@ class SearchResults extends Component {
 			dataSource={this.state.dataSource.cloneWithRows(this.props.results)}
 			renderRow={this.renderRow.bind(this)}
 			renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} 
-							style={styles.separator} />}/>
+							style={styles.rowSeparator} />}/>
 		);
 	}
 
