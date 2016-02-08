@@ -28,3 +28,8 @@ This is a react-native android project. It tries to mimick the google search as 
 2. Go to command prompt at the location of zip, run npm install.
 3. Type command react-native run-android. (At this point either the device or emulator should be present.)
 
+
+### Project - screen shots - 
+
+![View in potrait mode](/screenshots/Screen Shot Potrait.png?raw=true "View in potrait mode")
+![View in landscape mode](/screenshots/Screen Shot landscape.png?raw=true "View in landscape mode")
